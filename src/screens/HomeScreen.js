@@ -1,15 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, Modal } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import hotelData from '../data/hotelData';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
-const renderCarouselItem = ({ item }) => (
-    <Image source={item} style={styles.image} />
+const renderCarouselItem = ({ item, onPress }) => (
+    <TouchableOpacity onLongPress={() => onPress(item)}>
+        <Image source={item} style={styles.image} />
+    </TouchableOpacity>
 );
 
-const renderItem = ({ item }) => (
+const renderItem = ({ item, onPress }) => (
     <View style={styles.card}>
         <Carousel
             loop
@@ -17,7 +20,7 @@ const renderItem = ({ item }) => (
             height={200}
             autoPlay={true}
             data={item.images}
-            renderItem={({ item }) => renderCarouselItem({ item })}
+            renderItem={({ item }) => renderCarouselItem({ item, onPress })}
         />
         <View style={styles.infoContainer}>
             <Text style={styles.itemTitle}>{item.title}</Text>
@@ -28,6 +31,9 @@ const renderItem = ({ item }) => (
 );
 
 function HomeScreen({ navigation }) {
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [currentImage, setCurrentImage] = useState(null);
+
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -37,14 +43,25 @@ function HomeScreen({ navigation }) {
             )
         });
     }, [navigation]);
+
+    const handleImagePress = (image) => {
+        setCurrentImage([{ url: '', props: { source: image } }]);
+        setModalVisible(true);
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Hotels</Text>
             <FlatList
                 data={hotelData}
                 keyExtractor={item => item.id}
-                renderItem={renderItem}
+                renderItem={({ item }) => renderItem({ item, onPress: handleImagePress })}
             />
+            {currentImage && (
+                <Modal visible={isModalVisible} transparent={true}>
+                    <ImageViewer imageUrls={currentImage} onSwipeDown={() => setModalVisible(false)} enableSwipeDown />
+                </Modal>
+            )}
         </View>
     );
 }
