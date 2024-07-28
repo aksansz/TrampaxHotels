@@ -2,35 +2,53 @@ const hotelData = [
     {
         id: '1',
         title: 'Swiss Hotel',
+        description: 'A lovely room in Swiss Hotel',
         location: 'New York',
-        price: '$300/daily',
+        price: '400P',
+        discountedPrice: '300P',
+        rating: 4.8,
+        reviews: 150,
         images: [
             require('../../assets/images/Hotel1.webp'),
             require('../../assets/images/Hotel1-room.jpg'),
             require('../../assets/images/Hotel1-pool.jpg'),
-        ]
+        ],
+        exchange: true,
+        service: true,
     },
     {
         id: '2',
-        title: 'Modern Condo',
+        title: 'Modern Hotel',
+        description: 'Full package room in Modern Hotel',
         location: 'San Francisco',
-        price: '$200/daily',
+        price: '300P',
+        discountedPrice: '200P',
+        rating: 4.2,
+        reviews: 100,
         images: [
             require('../../assets/images/Hotel2.jpg'),
             require('../../assets/images/Hotel2-room.jpg'),
             require('../../assets/images/Hotel2-pool.webp'),
-        ]
+        ],
+        exchange: false,
+        service: true,
     },
     {
         id: '3',
-        title: 'Cozy Studio',
+        title: 'Cozy Hotel',
+        description: 'A room in Cozy Hotel',
         location: 'Chicago',
-        price: '$100/daily',
+        price: '200P',
+        discountedPrice: '150P',
+        rating: 4.0,
+        reviews: 170,
         images: [
             require('../../assets/images/Hotel3.jpg'),
             require('../../assets/images/Hotel3-room.jpg'),
             require('../../assets/images/Hotel3-pool.webp'),
-        ]
+        ],
+        exchange: true,
+        service: false,
     },
 ];
 

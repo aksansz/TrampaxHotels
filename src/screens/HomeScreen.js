@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, Modal } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, Modal, Button } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import hotelData from '../data/hotelData';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -23,9 +24,33 @@ const renderItem = ({ item, onPress }) => (
             renderItem={({ item }) => renderCarouselItem({ item, onPress })}
         />
         <View style={styles.infoContainer}>
-            <Text style={styles.itemTitle}>{item.title}</Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.itemTitle}>{item.title}</Text>
+                <View style={styles.ratingContainer}>
+                    <Icon name="star" size={16} color="#FFD700" />
+                    <Text style={styles.ratingText}>{item.rating} ({item.reviews})</Text>
+                </View>
+            </View>
             <Text>{item.location}</Text>
-            <Text>{item.price}</Text>
+            <View style={styles.priceContainer}>
+                <Text style={styles.oldPrice}>{item.price}</Text>
+                <Text style={styles.newPrice}>{item.discountedPrice}</Text>
+            </View>
+            <View style={styles.buttonContainer}>
+                {item.exchange && (
+                    <TouchableOpacity style={[styles.button, styles.exchangeButton]} onPress={() => alert('You can exchange it for your own property')}>
+                        <Text style={styles.buttonText}>Exchange</Text>
+                    </TouchableOpacity>
+                )}
+                <TouchableOpacity style={[styles.button, styles.pointsButton]} onPress={() => alert('You can get this by spending points')}>
+                    <Text style={styles.buttonText}>Points</Text>
+                </TouchableOpacity>
+                {item.service && (
+                    <TouchableOpacity style={[styles.button, styles.serviceButton]} onPress={() => alert('You can get this by giving service')}>
+                        <Text style={styles.buttonText}>Service</Text>
+                    </TouchableOpacity>
+                )}
+            </View>
         </View>
     </View>
 );
@@ -51,7 +76,6 @@ function HomeScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Hotels</Text>
             <FlatList
                 data={hotelData}
                 keyExtractor={item => item.id}
@@ -88,9 +112,25 @@ const styles = StyleSheet.create({
         padding: 16,
         marginVertical: 8,
     },
+    titleContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     itemTitle: {
         fontSize: 18,
         fontWeight: 'bold',
+        flex: 1,
+    },
+    ratingContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 8,
+    },
+    ratingText: {
+        marginLeft: 4,
+        fontSize: 14,
+        color: '#555',
     },
     image: {
         width: '100%',
@@ -100,6 +140,44 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         marginTop: 16,
+    },
+    priceContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    oldPrice: {
+        textDecorationLine: 'line-through',
+        color: '#999',
+        marginRight: 8,
+    },
+    newPrice: {
+        color: '#333',
+        fontWeight: 'bold',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 16,
+    },
+    button: {
+        flex: 1,
+        padding: 10,
+        borderRadius: 8,
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    exchangeButton: {
+        backgroundColor: '#4CAF50', // Green
+    },
+    pointsButton: {
+        backgroundColor: '#2196F3', // Blue
+    },
+    serviceButton: {
+        backgroundColor: '#FF8C00', // Amber
     },
     logoutButton: {
         marginRight: 16,
