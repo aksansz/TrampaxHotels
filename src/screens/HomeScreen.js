@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         fontWeight: 'bold',
+        fontSize: 12,
     },
     exchangeButton: {
         backgroundColor: '#4CAF50', // Green
